@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html charset="UTF-8">
+  <head>
+    <meta name="viewport">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.5/bootstrap-table.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.5/bootstrap-table.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css" rel="stylesheet" title="main">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css" rel="stylesheet">
+    <title>IoT Mosquito Party</title>
+    <!-- Based in ESP Webserver Tutorials by http://www.projetsdiy.fr -->
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h1>IoT Mosquito Party</h1>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="party-tab" data-toggle="tab" href="#party" role="tab" aria-controls="profile" aria-selected="false">Party</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="config-tab" data-toggle="tab" href="#config" role="tab" aria-controls="contact" aria-selected="false">Config</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <h2>Steuerung</h2>
+        <div class="row">
+          <div class="col-xs-6 col-md-4">
+            <h4 class="text-left">LEDs
+              <div class="span badge badge-danger" id="LED_state">OFF</div>
+            </h4>
+          </div>
+          <div class="col-xs-6 col-md-2">
+            <div class="button btn btn-success btn-lg" id="LED_On" type="button">ON</div>
+          </div>
+          <div class="col-xs-6 col-md-2">
+            <div class="button btn btn-danger btn-lg" id="LED_Off" type="button">OFF</div>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <input id="pwm_led" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="100"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 col-md-4">
+            <h4 class="text-left">L&uuml;fter
+              <div class="span badge badge-danger" id="Fan_state">OFF</div>
+            </h4>
+          </div>
+          <div class="col-xs-6 col-md-2">
+            <div class="button btn btn-success btn-lg" id="Fan_On" type="button">ON</div>
+          </div>
+          <div class="col-xs-6 col-md-2">
+            <div class="button btn btn-danger btn-lg" id="Fan_Off" type="button">OFF</div>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <input id="pwm_fan" data-slider-id='ex2Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="100"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="button btn btn-primary btn-lg" id="Update" type="button">UPDATE</div>
+          <div class="button btn btn-danger btn-lg" id="UpdateA" type="button">AUTO UPDATE</div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="party" role="tabpanel" aria-labelledby="party-tab">
+        <h2>PARTY!</h2>
+        <div class="row">
+          <div class="col-xs-6 col-md-4">
+            <div class="button btn btn-dark btn-lg" id="Party_Off" type="button">Off</div>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <div class="button btn btn-primary btn-lg" id="Party_Round" type="button">Ring</div>
+          </div>
+          <div class="col-xs-6 col-md-4">
+            <div class="button btn btn-primary btn-lg" id="Party_Fade" type="button">Fade</div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="config" role="tabpanel" aria-labelledby="config-tab">
+        <h2>Configuration</h2>
+        <div class="btn-group">
+          <button class="btn btn-default" id="labelTheme">Theme</button>
+          <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a class="change-style-menu-item" href="#" rel="bootstrap">Boostrap</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="cerulean">Cerulean</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="cosmo">Cosmo</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="cyborg">Cyborg</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="darkly">Darkly</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="flatly">Flatly</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="journal">Journal</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="lumen">Lumen</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="paper">Paper</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="readable">Readable</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="sandstone">Sandstone</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="simplex">Simplex</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="slate">Slate</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="spacelab">Spacelab</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="superhero">Superhero</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="united">United</a></li>
+            <li><a class="change-style-menu-item" href="#" rel="yeti">Yeti</a></li>
+          </ul>
+        </div>
+      </div>
+      </div>
+      <div class="row" style="position:absolute; bottom:0; width:100%">
+        <div class="col-xs-2 col-md-2"><img src="logo.png" width="30" height="30"></div>
+        <div class="col-xs-5 col-md-5">
+          <p>IoT Mosquito Party - Version 0.1</p>
+        </div>
+        <div class="col-xs-5 col-md-5">
+          <p><a href="https://www.adlerweb.info">www.adlerweb.info</a></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      var Timer_Updates;
+
+      $('#pwm_led').slider({
+        formatter: function(value) {
+          return 'Current value: ' + value;
+        }
+      });
+
+      $('#pwm_fan').slider({
+        formatter: function(value) {
+          return 'Current value: ' + value;
+        }
+      });
+
+      $('#LED_On').click(function(){ setIO('LED','100'); });
+      $('#LED_Off').click(function(){ setIO('LED','0'); });
+      $('#Fan_On').click(function(){ setIO('FAN','100'); });
+      $('#Fan_Off').click(function(){ setIO('FAN','0'); });
+
+      $('#Party_Off').click(function(){ setParty('0'); });
+      $('#Party_Round').click(function(){ setParty('1'); });
+      $('#Party_Fade').click(function(){ setParty('2'); });
+
+      $('#Update').click(function(){ getStates(); });
+      $('#UpdateA').click(function(){ autoUpdate(); });
+
+      $('#pwm_led').change(function(){ setIO('LED', $('#pwm_led').slider('getValue')); });
+      $('#pwm_fan').change(function(){ setIO('FAN', $('#pwm_fan').slider('getValue')); });
+
+      function autoUpdate() {
+        if(getStates()) {
+          Timer_Updates=setTimeout(function(){
+            autoUpdate();
+          },1500);
+          $("#UpdateA").addClass("btn-success").removeClass("btn-danger");
+        }else{
+          $("#UpdateA").addClass("btn-danger").removeClass("btn-success");
+        }
+      }
+
+      function getStates(){
+        $.getJSON('/state.json', function(data){
+
+          if(data.led > 0) {
+            $('#LED_state').html("ON");
+            $("#LED_state").addClass("badge-success").removeClass("badge-danger");
+          }else{
+            $('#LED_state').html("OFF");
+            $("#LED_state").addClass("badge-danger").removeClass("badge-success");
+          }
+
+          if(data.fan > 0) {
+            $('#Fan_state').html("ON");
+            $("#Fan_state").addClass("badge-success").removeClass("badge-danger");
+          }else{
+            $('#Fan_state').html("OFF");
+            $("#Fan_state").addClass("badge-danger").removeClass("badge-success");
+          }
+
+          $('#pwm_led').slider('setValue', data.led);
+          $('#pwm_fan').slider('setValue', data.fan);
+
+          return true;
+        }).fail(function(err){
+          console.log("json error "+JSON.stringify(err));
+          return false;
+        });
+      };
+
+      function setIO(id, state){
+        $.post("gpio?id=" + id + "&state=" + state).done(function(data){
+          if ( data.success !== "1" ) {
+            console.log("IO SET ERR");
+          }      
+        }).fail(function(err){
+          console.log("err IO " + JSON.stringify(err));
+        });
+      } 
+
+      function setParty(state){
+        $.post("party?state=" + state).done(function(data){
+          if ( data.success !== "1" ) {
+            console.log("PARTY SET ERR");
+          }      
+        }).fail(function(err){
+          console.log("err PARTY " + JSON.stringify(err));
+        });
+      } 
+      
+      
+      // Change current theme
+      // Adapted from https://wdtz.org/bootswatch-theme-selector.html
+      var supports_storage = supports_html5_storage();
+      if (supports_storage) {
+        var theme = localStorage.theme;
+        if ( typeof theme != 'undefined' ) {
+          console.log("Reloading theme " + theme);
+          set_theme(get_themeUrl(theme));
+        }
+      }
+      
+      // New theme selected
+      jQuery(function($){
+        $('body').on('click', '.change-style-menu-item', function() {
+          var theme_name = $(this).attr('rel');
+          console.log("Changing theme to " + theme_name);
+          var theme_url = get_themeUrl(theme_name);
+          console.log("URL theme : " + theme_url);
+          set_theme(theme_url);
+        });
+      });
+
+      // Get theme URL
+      function get_themeUrl(theme_name){
+        $('#labelTheme').html("Th&egrave;me : " + theme_name);
+        var url_theme = "";
+        if ( theme_name === "bootstrap" ) {
+          url_theme = "https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css";
+        } else {
+          url_theme = "https://maxcdn.bootstrapcdn.com/bootswatch/4.3.1/" + theme_name + "/bootstrap.min.css";
+        }
+        if (supports_storage) {
+          // save into the local database the selected theme
+          localStorage.theme = theme_name;
+        }
+        return url_theme;
+      }
+
+      // Apply theme
+      function set_theme(theme_url) {
+        $('link[title="main"]').attr('href', theme_url);
+      }
+
+      // check if local storage is available
+      function supports_html5_storage(){
+        try {
+          return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
+          return false;
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html charset="UTF-8">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uptime Test</title>
+  </head>
+  <body>
+    <h1>Uptime Test</h1>
+    <img src="/biba.png">
+    <p>Der ESP ist seit <span id="time-ms">??</span> Millisekunden aktiv. Dies entspricht <span id="time-s">??</span> Sekunden.</p>
+    <script type="application/javascript">
+    
+    var xmlhttp = new XMLHttpRequest();
+    var url = "/time.json";
+
+    function updateStart() {
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if(this.status == 200) {
+                    try {
+                        var data = JSON.parse(this.responseText);
+                        updateView(data);
+                    } catch (e) {
+                        console.log("Update failed: " + e);
+                        console.log(this.responseText);
+                    }
+                }
+
+                window.setTimeout(updateStart, 500);
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function updateView(data) {
+        document.getElementById("time-ms").innerHTML = data.uptime;
+        document.getElementById("time-s").innerHTML = (data.uptime/1000).toFixed(1);
+    }
+
+    updateStart();
+    </script>
+  </body>
+</html>
